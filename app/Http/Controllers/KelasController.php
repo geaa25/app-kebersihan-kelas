@@ -37,7 +37,7 @@ class KelasController extends Controller
     {
         $search = $request->get('search');
 
-        // Tambahkan with(['penilaian' => ...]) agar skor terbaca di PDF
+        // Ambil data kelas BESERTA penilaiannya (biar skor muncul)
         $data_kelas = Kelas::with(['penilaian' => function($query) {
                 $query->latest(); 
             }])
@@ -46,10 +46,11 @@ class KelasController extends Controller
                             ->orWhere('wali_kelas', 'like', "%{$search}%");
             })->get();
 
-        $pdf = Pdf::loadView('kelas.pdf', compact('data_kelas', 'search'));
-        $nama_file = $search ? 'laporan-kelas-' . $search . '.pdf' : 'laporan-semua-kelas.pdf';
+    // Kirim 'search' (bukan 'cari') agar sinkron dengan file PDF kamu
+    $pdf = Pdf::loadView('kelas.pdf', compact('data_kelas', 'search'));
 
-        return $pdf->download($nama_file);
+    $nama_file = $search ? 'laporan-kelas-' . $search . '.pdf' : 'laporan-semua-kelas.pdf';
+    return $pdf->download($nama_file);
     }
 
     /**
