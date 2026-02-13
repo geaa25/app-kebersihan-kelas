@@ -49,7 +49,7 @@ class PenilaianController extends Controller
         // DEBUG: Cek apakah file benar-benar masuk ke sistem
         $path_foto = null;
         if ($request->hasFile('foto')) {
-            // Simpan ke folder storage/app/public/foto_bukti
+            // Simpan ke folder storage/foto_bukti
             $path_foto = $request->file('foto')->store('foto_bukti', 'public');
         }
 
